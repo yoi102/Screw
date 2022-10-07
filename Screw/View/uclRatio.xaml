@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="Screw.View.uclRatio"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+             xmlns:local="clr-namespace:Screw.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="120" d:DesignWidth="220">
+
+    <UserControl.Resources>
+        
+        <Style x:Key="styleProgressBar" TargetType="{x:Type ProgressBar}">
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="80"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ProgressBar}">
+                        <StackPanel Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="{TemplateBinding Margin}" SnapsToDevicePixels="True">
+                            <Grid Width="75" Height="75" HorizontalAlignment="{Binding HorizontalAlignment}" VerticalAlignment="{Binding VerticalAlignment}">
+                                <ed:Arc ArcThickness="5" StartAngle="0" Fill="{TemplateBinding Background}" Stretch="None" EndAngle="360"/>
+                                <ed:Arc ArcThickness="5" StartAngle="0" Fill="{TemplateBinding Foreground}" Stretch="None" EndAngle="{TemplateBinding Value}"></ed:Arc>
+                            </Grid>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+    </UserControl.Resources>
+    
+    
+    <Border Background="Black" CornerRadius="10" DataContext="{Binding GloPara}" >
+        <Grid Margin="3" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="NG数：" Foreground="White" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+                <TextBlock Text="{Binding MotorNG}" Foreground="Red" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock Text="总数：" Foreground="White" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+                <TextBlock Text="{Binding TotalMotor}" Foreground="GreenYellow" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBlock Text="NG数：" Foreground="White" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+                <TextBlock Text="{Binding TabletNG}" Foreground="Red" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock Text="总数：" Foreground="White" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+                <TextBlock Text="{Binding TotalTablet}" Foreground="GreenYellow" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <ProgressBar Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"  VerticalAlignment="Top" Maximum="360"  Style="{StaticResource  styleProgressBar }"  
+                Foreground="Red" Background="#FF0068FF"  Value="{Binding MotorNGRatio360}" Opacity="0.8"  />
+            <TextBlock Grid.Row="1" Text="{Binding MotorNGRatio,StringFormat={}{0:P2}}" Foreground="White"  FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="圆孔_NG" Foreground="WhiteSmoke"  FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+            
+            <ProgressBar Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"  VerticalAlignment="Top" Maximum="360"  Style="{StaticResource  styleProgressBar }"  
+                Foreground="Red" Background="#FF00AAF9"  Value="{Binding TabletNGRatio360}" Opacity="0.8"  />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TabletNGRatio,StringFormat={}{0:P2}}" Foreground="White"  FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="压轴_NG" Foreground="WhiteSmoke"  FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+
+
+        </Grid>
+    </Border>
+</UserControl>

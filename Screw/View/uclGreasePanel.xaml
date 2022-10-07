@@ -1,0 +1,677 @@
+﻿<UserControl x:Class="Screw.View.uclGreasePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:utility="clr-namespace:Screw.Utilities"
+             xmlns:local="clr-namespace:Screw.View" xmlns:viewmodel="clr-namespace:Screw.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:ViewModelMain}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1000">
+    <UserControl.Resources>
+        <utility:ConverterGreaseJudgeColor x:Key="GreaseJudgeColor"/>
+        <utility:ConverterGreaseJudgeText x:Key="GreaseJudgeText"/>
+
+        <BooleanToVisibilityConverter x:Key="Bool2Visbility"/>
+        <utility:ConverterBool2BoolInv x:Key="Bool2BoolInv"/>
+
+        <Style x:Key="AndroidToggleButton" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Viewbox>
+                            <Border x:Name="Border" CornerRadius="10"
+                            Background="#FFFFFFFF"
+                            Width="40" Height="20">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="0.5" Direction="0" Opacity="0.3" />
+                                </Border.Effect>
+                                <Ellipse x:Name="Ellipse" Fill="#FFFFFFFF" Stretch="Uniform"
+                                 Margin="2 1 2 1"
+                                 Stroke="Gray" StrokeThickness="0.2"
+                                 HorizontalAlignment="Stretch">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3" Direction="260" />
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                            </Border>
+                        </Viewbox>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Checked">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Border"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="#FF4CD661"
+                                                    Duration="0:0:0.1" />
+                                        <ThicknessAnimation Storyboard.TargetName="Ellipse"
+                                                        Storyboard.TargetProperty="Margin"
+                                                        To="20 1 2 1"
+                                                        Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Unchecked">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Border"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="White"
+                                                    Duration="0:0:0.1" />
+                                        <ThicknessAnimation Storyboard.TargetName="Ellipse"
+                                                        Storyboard.TargetProperty="Margin"
+                                                        To="2 1 2 1"
+                                                        Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Style x:Key="TabControlStyle" TargetType="{x:Type TabControl}">
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FFACACAC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+
+                        <Grid x:Name="templateRoot" ClipToBounds="True" SnapsToDevicePixels="True" KeyboardNavigation.TabNavigation="Local">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="ColumnDefinition0"/>
+                                <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                                <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                            </Grid.RowDefinitions>
+                            <UniformGrid x:Name="HeaderPanel" Rows="1" Background="Transparent" Grid.Column="0" IsItemsHost="True" Margin="0" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
+                            <Line X1="0" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" Stroke="White" StrokeThickness="0.1" VerticalAlignment="Bottom" Margin="0 0 0 1" SnapsToDevicePixels="True"/>
+                            <Border x:Name="ContentPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
+                                <ContentPresenter x:Name="PART_SelectedContentHost" ContentTemplate="{TemplateBinding SelectedContentTemplate}" Content="{TemplateBinding SelectedContent}" ContentStringFormat="{TemplateBinding SelectedContentStringFormat}" ContentSource="SelectedContent" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="TabStripPlacement" Value="Bottom">
+                                <Setter Property="Grid.Row" TargetName="HeaderPanel" Value="1"/>
+                                <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
+                            </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Left">
+                                <Setter Property="Grid.Row" TargetName="HeaderPanel" Value="0"/>
+                                <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="HeaderPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="ContentPanel" Value="1"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                            </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Right">
+                                <Setter Property="Grid.Row" TargetName="HeaderPanel" Value="0"/>
+                                <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="HeaderPanel" Value="1"/>
+                                <Setter Property="Grid.Column" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
+        <Style x:Key="TabItemStyle" TargetType="TabItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Grid >
+                            <Border x:Name="bd"
+                                    Background="Gray"
+                                    Height="30"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0 0 0 0"
+                                    CornerRadius="10"
+                                    Margin="5" >
+                                <TextBlock x:Name="txt" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=Header}" Foreground="WhiteSmoke" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10 0 10 0"/>
+                            </Border>
+                            <Rectangle Fill="Red" Height="3" VerticalAlignment="Bottom" Visibility="Hidden" Name="LeftSideRectangle"></Rectangle>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="bd" Property="BorderThickness" Value="0,0,0,0" />
+                                <Setter TargetName="bd" Property="BorderBrush" Value="Transparent" />
+                                <!--选择后的背景-->
+                                <Setter TargetName="bd" Property="Background" Value="black" />
+                                <Setter TargetName="LeftSideRectangle" Property="Visibility" Value="Visible"></Setter>
+                                <!--<Setter TargetName="bd" Property="Background" Value="{StaticResource  defaultcolor}" />-->
+
+                                <!--字体颜色选择后的-->
+                                <Setter TargetName="txt" Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <!--<Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="txt" Property="Foreground" Value="{StaticResource defaultoverbg}"/>
+                        </Trigger>-->
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="False"/>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="txt" Property="Foreground" Value="WhiteSmoke"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
+
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Foreground="#FFC8A5A0" VerticalAlignment="Center"    TextAlignment="Center"  FontSize="20" 
+                       Text="{Binding PositiveJudge, Converter={StaticResource GreaseJudgeText}}"
+                       Background="{Binding PositiveJudge, Converter={StaticResource GreaseJudgeColor}}"/>
+            <TextBlock Grid.Column="1" Foreground="#FFC8A5A0" VerticalAlignment="Center"    TextAlignment="Center"  FontSize="20" 
+                       Text="{Binding Positive2Judge, Converter={StaticResource GreaseJudgeText}}"
+                       Background="{Binding Positive2Judge, Converter={StaticResource GreaseJudgeColor}}"/>
+            <TextBlock Grid.Column="2" Foreground="#FFC8A5A0" VerticalAlignment="Center"    TextAlignment="Center"  FontSize="20" 
+                       Text="{Binding NegativeJudge, Converter={StaticResource GreaseJudgeText}}"
+                       Background="{Binding NegativeJudge, Converter={StaticResource GreaseJudgeColor}}"/>
+        </Grid>
+        
+        <TabControl  Style="{StaticResource TabControlStyle}" Background="#FF2D2D30">
+
+            <TabItem Header="小图" Style="{StaticResource TabItemStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GridSplitter Grid.Column="1"  Background="Black"  Width="5"  HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                    <GridSplitter Grid.Column="3"  Background="Black"  Width="5"  HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+
+                    <Border>
+
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border Background="Gray" CornerRadius="10">
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="规格" Grid.ColumnSpan="3" Foreground="Wheat"/>
+                                    <Button Grid.Column="1" Margin="10 0 10 0" Width="auto" Height="auto" Content="存" Foreground="Black" Command="{Binding SaveParaCommand}" Visibility="{Binding VisibilitySettings, Converter={StaticResource Bool2Visbility}}" />
+                                    <Button Grid.Column="2" Margin="10 0 10 0" Width="auto" Height="auto" Content="读" Foreground="Black" Command="{Binding LoadParaCommand}"/>
+                                    <TextBox Grid.Row="1"  Text="{Binding GreasePara.Drop1GreaseBlobLower_W}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="≤宽≤" Foreground="White"/>
+                                    <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding GreasePara.Drop1GreaseBlobUpper_W}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                    <TextBox Grid.Row="2"  Text="{Binding GreasePara.Drop1GreaseBlobLower_H}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="≤高≤" Foreground="White"/>
+                                    <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding GreasePara.Drop1GreaseBlobUpper_H}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                    <TextBox Grid.Row="3"  Text="{Binding GreasePara.Drop1GreaseBlobLower_A}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="≤面积≤" Foreground="White"/>
+                                    <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding GreasePara.Drop1GreaseBlobUpper_A}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                    <Button Grid.Row="4" Grid.Column="0" Margin="5 0 5 0" Content="备份" Command="{Binding BackupConfigsCommand}" ToolTipService.ShowDuration="999999999" ToolTip="备份文件夹路径—>文件位置的ConfigsBackup文件夹内"/>
+                                    <TextBlock Grid.Row="4" Grid.Column="1" Text="小亮度≤" Foreground="White"/>
+                                    <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding GreasePara.SumBrightnessLimitDrop12}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                    <TextBlock Grid.Column="3" Text="现状" Foreground="Wheat"/>
+                                    <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding Drop1GreaseBlob_W}" Foreground="GreenYellow"/>
+                                    <TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding Drop1GreaseBlob_H}" Foreground="GreenYellow"/>
+                                    <TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding Drop1GreaseBlob_A}" Foreground="GreenYellow"/>
+                                    <TextBlock Grid.Column="3" Grid.Row="4" Text="{Binding SumBrightnessDrop12}" Foreground="GreenYellow"/>
+                                </Grid>
+                            </Border>
+
+
+                            <local:uclCaptureImageView DataContext="{Binding ImageObjects[2]}"  Width="auto" Height="auto" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Grid Visibility="{Binding VisibilitySettings,Converter={StaticResource Bool2Visbility}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <!--<Button Margin="10 0 10 0"  Content="使用图片" Command="{Binding ImageOjectDrop12UseImageCommand}" ToolTipService.ShowDuration="999999999" ToolTip="使用旋转前的图片"/>-->
+                                <!--<Button Grid.Column="1" Margin="10 0 10 0" Content="处理图片" Command="{Binding ImageOjectDrop12DisposeCommand}" ToolTipService.ShowDuration="999999999" ToolTip="进行第12滴计测，最好用图片，[2].DisplayImage不为Null时也可使用。"/>-->
+                                <Button Grid.Column="2" Margin="10 0 10 0" Content="油脂测量范围(1)" Command="{Binding ImageOjectDrop1SavePositionCommand}" ToolTipService.ShowDuration="999999999" ToolTip="小图的相对位置蓝色；图片不为null时使用；也可用使用图片按钮和处理图片后使用。"/>
+                            </Grid>
+                        </StackPanel>
+
+                    </Border>
+
+                    <Border Grid.Column="2">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+
+                            <Border Background="Gray" CornerRadius="10">
+                                <Grid>
+
+                                    <StackPanel >
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                                            <TextBlock Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Text="旋转图片: " ToolTip="三幅图同等,启用时要用旋转前的图，没启用时使用旋转后图" />
+                                            <ToggleButton IsChecked="{Binding IsRotate}" Style="{StaticResource AndroidToggleButton}" ToolTipService.ShowDuration="999999999"  ToolTip="三幅图同等,启用时要用旋转前的图，没启用时使用旋转后图" />
+                                            <TextBlock Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Text="DebugMode: " ToolTip="显示一些有线框的图和日志，但运行会变慢一点！" />
+                                            <ToggleButton IsChecked="{Binding GloPara.DebugMode}" Style="{StaticResource AndroidToggleButton}" ToolTipService.ShowDuration="999999999"  ToolTip="显示有线框的图和日志，但运行会变慢一点！" />
+
+
+                                        </StackPanel>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="规格" Grid.ColumnSpan="3" Foreground="Wheat"/>
+                                            <Button Grid.Column="1" Margin="10 0 10 0" Width="auto" Height="auto" Content="存" Foreground="Black" Command="{Binding SaveParaCommand}" Visibility="{Binding VisibilitySettings, Converter={StaticResource Bool2Visbility}}" />
+
+                                            <Button Grid.Column="2" Content="读" Foreground="Black" Command="{Binding LoadParaCommand}"/>
+
+                                            <TextBox Grid.Row="1"  Text="{Binding GreasePara.Drop2GreaseBlobLower_W}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="≤宽≤" Foreground="White"/>
+                                            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding GreasePara.Drop2GreaseBlobUpper_W}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                            <TextBox Grid.Row="2"  Text="{Binding GreasePara.Drop2GreaseBlobLower_H}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                            <TextBlock Grid.Row="2" Grid.Column="1" Text="≤高≤" Foreground="White"/>
+                                            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding GreasePara.Drop2GreaseBlobUpper_H}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                            <TextBox Grid.Row="3"  Text="{Binding GreasePara.Drop2GreaseBlobLower_A}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                            <TextBlock Grid.Row="3" Grid.Column="1" Text="≤面积≤" Foreground="White"/>
+                                            <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding GreasePara.Drop2GreaseBlobUpper_A}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                            <TextBlock Grid.Column="3" Text="现状" Foreground="Wheat"/>
+                                            <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding Drop2GreaseBlob_W}" Foreground="GreenYellow"/>
+                                            <TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding Drop2GreaseBlob_H}" Foreground="GreenYellow"/>
+                                            <TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding Drop2GreaseBlob_A}" Foreground="GreenYellow"/>
+
+
+
+                                            <TextBox Grid.Row="4"  Text="{Binding GreasePara.Drop2MiniLimitWHA[0]}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                            <TextBlock Grid.Row="4" Grid.Column="1" Text="≤m宽" Foreground="White"/>
+                                            <TextBox Grid.Row="5"  Text="{Binding GreasePara.Drop2MiniLimitWHA[1]}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                            <TextBlock Grid.Row="5" Grid.Column="1" Text="≤m高" Foreground="White"/>
+                                            <TextBox Grid.Row="6"  Text="{Binding GreasePara.Drop2MiniLimitWHA[2]}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                            <TextBlock Grid.Row="6" Grid.Column="1" Text="≤m面积" Foreground="White" />
+
+
+                                            <TextBlock Grid.Column="3" Grid.Row="4" Text="{Binding Drop2MinorBlob_W}" Foreground="GreenYellow" />
+                                            <TextBlock Grid.Column="3" Grid.Row="5" Text="{Binding Drop2MinorBlob_H}" Foreground="GreenYellow" />
+                                            <TextBlock Grid.Column="3" Grid.Row="6" Text="{Binding Drop2MinorBlob_A}" Foreground="GreenYellow" />
+
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+
+
+
+                            <local:uclCaptureImageView DataContext="{Binding ImageObjects[3]}"  Width="auto" Height="auto" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Grid Visibility="{Binding VisibilitySettings,Converter={StaticResource Bool2Visbility}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Margin="10 0 10 0"  Content="使用图片" Command="{Binding ImageOjectDrop12UseImageCommand}" ToolTipService.ShowDuration="999999999" ToolTip="使用旋转前的图片"/>
+                                <Button Grid.Column="1" Margin="10 0 10 0" Content="处理图片" Command="{Binding ImageOjectDrop12DisposeCommand}" ToolTipService.ShowDuration="999999999" ToolTip="进行第12滴计测，最好用图片，[2].DisplayImage不为Null时也可使用。"/>
+                                <Button Grid.Column="2" Margin="10 0 10 0" Content="油脂测量范围(2)" Command="{Binding ImageOjectDrop2SavePositionCommand}" ToolTipService.ShowDuration="999999999" ToolTip="小图绝对位置蓝色；可在产线使用后，图片不为null时使用；也可用使用图片按钮和处理图片后使用。"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="4">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border Background="Gray" CornerRadius="10">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="规格" Grid.ColumnSpan="3" Foreground="Wheat"/>
+                                        <Button Grid.Column="1" Margin="10 0 10 0" Width="auto" Height="auto" Content="存" Foreground="Black" Command="{Binding SaveParaCommand}" Visibility="{Binding VisibilitySettings, Converter={StaticResource Bool2Visbility}}" />
+
+                                        <Button Grid.Column="2" Content="读" Foreground="Black" Command="{Binding LoadParaCommand}"/>
+                                        <TextBox Grid.Row="1"  Text="{Binding GreasePara.Drop3GreaseBlobLower_W}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Text="≤宽≤" Foreground="White"/>
+                                        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding GreasePara.Drop3GreaseBlobUpper_W}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                        <TextBox Grid.Row="2"  Text="{Binding GreasePara.Drop3GreaseBlobLower_H}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="≤高≤" Foreground="White"/>
+                                        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding GreasePara.Drop3GreaseBlobUpper_H}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                        <TextBox Grid.Row="3"  Text="{Binding GreasePara.Drop3GreaseBlobLower_A}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                        <TextBlock Grid.Row="3" Grid.Column="1" Text="≤面积≤" Foreground="White" />
+                                        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding GreasePara.Drop3GreaseBlobUpper_A}"  IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+
+
+                                        <TextBox Grid.Row="4"  Text="{Binding GreasePara.Drop3MiniLimitWHA[0]}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                        <TextBlock Grid.Row="4" Grid.Column="1" Text="≤m宽" Foreground="White"/>
+                                        <TextBox Grid.Row="5"  Text="{Binding GreasePara.Drop3MiniLimitWHA[1]}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                        <TextBlock Grid.Row="5" Grid.Column="1" Text="≤m高" Foreground="White"/>
+                                        <TextBox Grid.Row="6"  Text="{Binding GreasePara.Drop3MiniLimitWHA[2]}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}"/>
+                                        <TextBlock Grid.Row="6" Grid.Column="1" Text="≤m面积" Foreground="White" />
+
+                                        <TextBlock Grid.Column="3" Text="现状" Foreground="Wheat"/>
+                                        <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding Drop3GreaseBlob_W}" Foreground="GreenYellow" />
+                                        <TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding Drop3GreaseBlob_H}" Foreground="GreenYellow" />
+                                        <TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding Drop3GreaseBlob_A}" Foreground="GreenYellow" />
+                                        
+                                        
+                                        <TextBlock Grid.Column="3" Grid.Row="4" Text="{Binding Drop3MinorBlob_W}" Foreground="GreenYellow" />
+                                        <TextBlock Grid.Column="3" Grid.Row="5" Text="{Binding Drop3MinorBlob_H}" Foreground="GreenYellow" />
+                                        <TextBlock Grid.Column="3" Grid.Row="6" Text="{Binding Drop3MinorBlob_A}" Foreground="GreenYellow" />
+                                        <!--<TextBlock Grid.Column="3" Grid.Row="4" Text="{Binding SumBrightnessDrop3}" Foreground="GreenYellow" />-->
+                                        
+                                        
+                                        
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="{Binding Magnet1Brightness}" Foreground="GreenYellow" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Magnet2Brightness}" Foreground="GreenYellow" />
+                                        <TextBlock Grid.Column="2" Text="{Binding Magnet3Brightness}" Foreground="GreenYellow" />
+                                        <TextBlock Grid.Column="3" Text="{Binding Magnet4Brightness}" Foreground="GreenYellow" />
+
+                                        <TextBox Grid.Row="1"  Text="{Binding GreasePara.Magnet1BrightnessLimit}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}" ToolTip="磁石亮度小于此值时，视为有吸附螺丝，位置从左上到左下，顺时针"/>
+                                        <TextBox Grid.Row="1" Grid.Column="1"  Text="{Binding GreasePara.Magnet2BrightnessLimit}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}" ToolTip="磁石亮度小于此值时，视为有吸附螺丝，位置从左上到左下，顺时针"/>
+                                        <TextBox Grid.Row="1" Grid.Column="2"  Text="{Binding GreasePara.Magnet3BrightnessLimit}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}" ToolTip="磁石亮度小于此值时，视为有吸附螺丝，位置从左上到左下，顺时针"/>
+                                        <TextBox Grid.Row="1" Grid.Column="3"  Text="{Binding GreasePara.Magnet4BrightnessLimit}" IsReadOnly="{Binding VisibilitySettings ,Converter={StaticResource Bool2BoolInv}}" ToolTip="磁石亮度小于此值时，视为有吸附螺丝，位置从左上到左下，顺时针"/>
+
+                                    </Grid>
+
+                                </StackPanel>
+                            </Border>
+
+
+
+
+
+                            <local:uclCaptureImageView DataContext="{Binding ImageObjects[4]}"  Width="auto" Height="auto" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Grid Visibility="{Binding VisibilitySettings,Converter={StaticResource Bool2Visbility}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Margin="10 0 10 0"  Content="使用图片" Command="{Binding ImageOjectDrop3UseImageCommand}" ToolTipService.ShowDuration="999999999" ToolTip="使用旋转前的图片"/>
+                                <Button Grid.Column="1" Margin="10 0 10 0" Content="处理图片" Command="{Binding ImageOjectDrop3DisposeCommand}" ToolTipService.ShowDuration="999999999" ToolTip="进行第3滴计测，最好用图片，[4].DisplayImage不为Null时也可使用。"/>
+                                <Button Grid.Column="2" Margin="10 0 10 0" Content="油脂测量范围(3)" Command="{Binding ImageOjectDrop3SavePositionCommand}" ToolTipService.ShowDuration="999999999" ToolTip="小图绝对位置蓝色；需要先有基准点，可在产线使用后，图片不为null时使用；也可用使用图片按钮和处理图片后使用。"/>
+                            </Grid>
+
+
+
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+            </TabItem>
+
+            <TabItem Header="原图" Style="{StaticResource TabItemStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GridSplitter Grid.Column="1"  Background="Black"  Width="5"  HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                    <GridSplitter Grid.Column="3"  Background="Black"  Width="5"  HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+
+                    <Border>
+                        <StackPanel  HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <local:uclCaptureImageView DataContext="{Binding ImageObjects[0]}"  Width="auto" Height="auto" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Grid Visibility="{Binding VisibilitySettings,Converter={StaticResource Bool2Visbility}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button  Margin="10 0 10 0"  Content="使用图片" Command="{Binding ImageOjectDrop12UseImageCommand}" ToolTipService.ShowDuration="999999999"  ToolTip="使用旋转前的图片"/>
+                                <Button Grid.Column="1" Margin="10 0 10 0" Content="处理图片(L)" Command="{Binding ImageOjectDrop12DatumPointDrop12Command}" ToolTipService.ShowDuration="999999999" ToolTip="找基准点，产生基准点；需先使用图片，或图片不为null时"/>
+                                <Button Grid.Column="2" Margin="10 0 10 0" Content="设置亮度Roi" Command="{Binding ImageOjectDrop12SaveMarkCommand}" ToolTipService.ShowDuration="999999999" ToolTip="亮度Roi的相对位置；需要先有基准点，可在产线使用后，图片不为null时使用；也可用使用图片按钮和处理图片后使用。"/>
+                                <Button Grid.Row="1" Grid.Column="0" Margin="10 2 10 0" Content="设置第一滴Roi" Command="{Binding ImageOjectDrop1MinorSavePositionCommand}" ToolTipService.ShowDuration="999999999" ToolTip="第一滴Roi的相对位置；需要有基准点，图片不为null时使用。"/>
+                                <!--<Button.ToolTip>
+                                        <TextBlock Text="第一滴Roi的相对位置；需要有基准点，图片不为null时使用。"/>
+                                        -->
+                                <!--<Image Source="Resources/Drop1.png"/>-->
+                                <!--
+                                    </Button.ToolTip>
+                                </Button>-->
+                                <Button Grid.Row="1" Grid.Column="1" Margin="10 2 10 0" Content="设置第二滴Roi" Command="{Binding ImageOjectDrop2MinorSavePositionCommand}" ToolTipService.ShowDuration="999999999" ToolTip="第二滴Roi的相对位置；需要有基准点，图片不为null时使用。"/>
+                                <Button Grid.Row="1" Grid.Column="2" Margin="10 2 10 0" Content="设置定位点Roi" Command="{Binding ImageOjectDrop12SaveDatumCommand}" ToolTipService.ShowDuration="999999999" ToolTip="基准点Roi的绝对位置；不需要有基准点，图片不为null时使用。"/>
+
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2">
+                        <StackPanel  HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image   Source="{Binding BinOriginalPositiveImage}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="4">
+                        <StackPanel  HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <local:uclCaptureImageView DataContext="{Binding ImageObjects[1]}"  Width="auto" Height="auto" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Grid  Visibility="{Binding VisibilitySettings,Converter={StaticResource Bool2Visbility}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Button Margin="10 0 10 0" Content="使用图片" Command="{Binding ImageOjectDrop3UseImageCommand}" ToolTipService.ShowDuration="999999999" ToolTip="使用旋转前的图片"/>
+                                <Button Grid.Column="1" Margin="10 0 10 0" Content="处理图片(L)" Command="{Binding ImageOjectDrop3DatumCommand}" ToolTipService.ShowDuration="999999999" ToolTip="找基准点；需先使用图片，或图片不为null时"/>
+                                <!--<Button Grid.Column="2" Margin="10 0 10 0" Content="保存亮度Roi" Command="{Binding ImageOjectDrop3SaveMarkCommand}" ToolTipService.ShowDuration="999999999" ToolTip="亮度Roi的相对位置；需要先有基准点，可在产线使用后，图片不为null时使用；也可用使用图片按钮和处理图片后使用。"/>-->
+
+                                <Button Grid.Row="1" Grid.Column="1" Margin="10 2 10 0" Content="设置第三滴Roi" Command="{Binding ImageOjectDrop3MinorSavePositionCommand}" ToolTipService.ShowDuration="999999999" ToolTip="第三滴Roi的相对位置；需要有基准点，图片不为null时使用。"/>
+                                <Button Grid.Row="1" Grid.Column="2" Margin="10 2 10 0" Content="设置定位点Roi" Command="{Binding ImageOjectDrop3SaveDatumCommand}" ToolTipService.ShowDuration="999999999" ToolTip="基准点Roi的绝对位置；不需要有基准点，图片不为null时使用。"/>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                    <Button Content="1磁石Roi" Command="{Binding Magnet1RoiSaveCommand}" ToolTipService.ShowDuration="999999999" ToolTip="位置一磁铁的位置，总四个位置"/>
+                                    <Button Margin="2 0 0 0" Content="2R" Command="{Binding Magnet2RoiSaveCommand}" ToolTipService.ShowDuration="999999999" ToolTip="位置一磁铁的位置，总四个位置"/>
+                                    <Button Margin="2 0 0 0" Content="3R" Command="{Binding Magnet3RoiSaveCommand}" ToolTipService.ShowDuration="999999999" ToolTip="位置一磁铁的位置，总四个位置"/>
+                                    <Button Margin="2 0 0 0" Content="4R" Command="{Binding Magnet4RoiSaveCommand}" ToolTipService.ShowDuration="999999999" ToolTip="位置一磁铁的位置，总四个位置"/>
+
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+
+            </TabItem>
+
+
+            
+
+            <TabItem Header="Bin" Style="{StaticResource TabItemStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GridSplitter Grid.Column="1"  Background="Black"  Width="5"  HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                    <GridSplitter Grid.Column="3"  Background="Black"  Width="5"  HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+
+                    <Border>
+                        <Image   Source="{Binding BinPosiiveImage}"/>
+
+                    </Border>
+
+                    <Border Grid.Column="2">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image  x:Name="Image9" Source="{Binding BinPosiive2Image}" />
+
+                            <Grid Visibility="{Binding VisibilitySettings,Converter={StaticResource Bool2Visbility}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Margin="10 0 10 0"  Content="使用图片" Command="{Binding ImageOjectDrop12UseImageCommand}" ToolTipService.ShowDuration="999999999" ToolTip="使用旋转前的图片"/>
+                                <Button Grid.Column="1" Margin="10 0 10 0" Content="处理图片" Command="{Binding ImageOjectDrop12DisposeCommand}" ToolTipService.ShowDuration="999999999" ToolTip="进行第12滴计测，最好用图片，[2].DisplayImage不为Null时也可使用。"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="4">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image  x:Name="Image6" Source="{Binding BinNegativeImage}" />
+
+                            <Grid Visibility="{Binding VisibilitySettings,Converter={StaticResource Bool2Visbility}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Margin="10 0 10 0"  Content="使用图片" Command="{Binding ImageOjectDrop3UseImageCommand}" ToolTipService.ShowDuration="999999999" ToolTip="使用旋转前的图片"/>
+                                <Button Grid.Column="1" Margin="10 0 10 0" Content="处理图片" Command="{Binding ImageOjectDrop3DisposeCommand}" ToolTipService.ShowDuration="999999999" ToolTip="进行第3滴计测，最好用图片，[4].DisplayImage不为Null时也可使用。"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Minor" Style="{StaticResource TabItemStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GridSplitter Grid.Column="1"  Background="Black"  Width="5"  HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                    <GridSplitter Grid.Column="3"  Background="Black"  Width="5"  HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+
+                    <Border>
+                        <Image   Source="{Binding BinOriginalPositiveDrop12Image}"/>
+
+                    </Border>
+
+                    <Border Grid.Column="2">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image  Source="{Binding Drop2MinorCanvas}" />
+                            <Border Background="Green">
+                                <Image  Source="{Binding Drop2MinorBin}"  Margin="2"/>
+
+                            </Border>
+
+                            <Grid Visibility="{Binding VisibilitySettings,Converter={StaticResource Bool2Visbility}}" Margin=" 0 10 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Margin="10 0 10 0"  Content="使用图片" Command="{Binding ImageOjectDrop12UseImageCommand}" ToolTipService.ShowDuration="999999999" ToolTip="使用旋转前的图片"/>
+                                <Button Grid.Column="1" Margin="10 0 10 0" Content="处理图片" Command="{Binding ImageOjectDrop12DisposeCommand}" ToolTipService.ShowDuration="999999999" ToolTip="进行第12滴计测，最好用图片，[2].DisplayImage不为Null时也可使用。"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="4">
+                        <StackPanel  HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image   Source="{Binding Drop3MinorCanvas}" />
+                            <Border Background="Green">
+                                <Image   Source="{Binding Drop3MinorBin}" Margin="2" />
+                            </Border>
+                            
+                            <Grid Visibility="{Binding VisibilitySettings,Converter={StaticResource Bool2Visbility}}" Margin=" 0 10 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Margin="10 0 10 0"  Content="使用图片" Command="{Binding ImageOjectDrop3UseImageCommand}" ToolTipService.ShowDuration="999999999" ToolTip="使用旋转前的图片"/>
+                                <Button Grid.Column="1" Margin="10 0 10 0" Content="处理图片" Command="{Binding ImageOjectDrop3DisposeCommand}" ToolTipService.ShowDuration="999999999" ToolTip="进行第3滴计测，最好用图片，[4].DisplayImage不为Null时也可使用。"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+
+        </TabControl>
+    </Grid>
+</UserControl>

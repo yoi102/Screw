@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="Screw.View.uclPredictorsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:utility="clr-namespace:Screw.Utilities"
+             xmlns:local="clr-namespace:Screw.View"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <utility:ConverterConnection2Color x:Key="Connection2ColorConverter"/>
+        <utility:ConverterIsActive2Color x:Key="IsActive2ColorConverter"/>
+        <utility:ConverterErrorFlag2Color x:Key="ErrorFlag2ColorConverter"/>
+        <BooleanToVisibilityConverter x:Key="Bool2Visibility"/>
+    </UserControl.Resources>
+    <!-- predictors -->
+    <DataGrid   Grid.Column="1"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding PredictModules}">
+
+
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Path=Name}"/>
+            <DataGridTemplateColumn Header="C">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Ellipse Width="5" Height="5" ToolTip="IsConnected" Fill="{Binding IsConnected, Converter={StaticResource Connection2ColorConverter}}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="B">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <!--<Ellipse Width="5" Height="5" ToolTip="IsBusy" Fill="{Binding IsBusy, Converter={StaticResource IsActive2ColorConverter}}"/>-->
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="E">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <!--<Ellipse Width="5" Height="5" ToolTip="Error" Fill="{Binding ErrorFlag, Converter={StaticResource ErrorFlag2ColorConverter}}"/>-->
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="D">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Ellipse Width="5" Height="5" ToolTip="Display" Visibility="{Binding DisplayOnOff, Converter={StaticResource Bool2Visibility}}" Fill="SteelBlue"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="I">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Ellipse Width="5" Height="5" ToolTip="Interactive" Visibility="{Binding InteractiveDisplay, Converter={StaticResource Bool2Visibility}}" Fill="SteelBlue"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTextColumn Header="RcvCmd" IsReadOnly="True" Binding="{Binding Path=RecvMsg.cmd}" />
+            <DataGridTextColumn Header="Para" IsReadOnly="True" Binding="{Binding Path=RecvMsg.para}" />
+            <DataGridTextColumn Header="Time(ms)" IsReadOnly="True" Binding="{Binding Path=ResponseTime}" />
+            <DataGridTextColumn Header="Message" IsReadOnly="True" Binding="{Binding Path=Message}" />
+            <DataGridTextColumn Header="Server" IsReadOnly="True" Binding="{Binding Path=ServerUrl}" />
+            <DataGridTextColumn Header="PID" IsReadOnly="True" Binding="{Binding Path=PythonProcessID}" />
+            <DataGridTemplateColumn Header="CONTROL">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="2,0,2,0" Height="12" Command="{Binding StartPythonProcessCommand}" ToolTip="Start predictor python process">
+                                <Button.Content>
+                                    <Image Width="7" Height="7"/>
+                                </Button.Content>
+                            </Button>
+                            <Button Margin="2,0,2,0" Height="12" Command="{Binding TerminatePythonProcessCommand}" ToolTip="Terminate predictor python process">
+                                <Button.Content>
+                                    <Image Width="7" Height="7" />
+                                </Button.Content>
+                            </Button>
+                            <Button Margin="2,0,2,0" Height="12" Command="{Binding SwitchDisplayCommand}" ToolTip="Turn ON or OFF predictor image display">
+                             
+                                <Button.Content>
+                                    <Image Width="7" Height="7" />
+                                </Button.Content>
+                            </Button>
+                            <Button Margin="2,0,2,0" Height="12" Command="{Binding SwitchInteractiveCommand}" ToolTip="Set predictor image display to be interactive">
+                                <Button.Content>
+                                    <Image Width="7" Height="7" />
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <!--<DataGridCheckBoxColumn Header="Resize" IsReadOnly="True" Binding="{Binding Path=DoResizing}"/>-->
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>

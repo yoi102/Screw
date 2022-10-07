@@ -1,0 +1,139 @@
+﻿<Window x:Class="Screw.View.wndImageObjEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Screw.View"
+        xmlns:utility="clr-namespace:Screw.Utilities"
+        mc:Ignorable="d"
+        Title="{Binding Name}" Height="450" Width="800" Closing="Window_Closed" Topmost="False">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="ConvertBool2Visibility"/>
+    </Window.Resources>
+    <Border Grid.Column="0" Grid.Row="0" Margin="2" Background="#1C1C1C" CornerRadius="6">
+        <Grid>
+            <Image Grid.Column="0" Grid.Row="0" Margin="2" Name="imgSel" Source="{Binding DisplayImage}"
+                                utility:MouseBehaviour.MouseUpCommand="{Binding MouseUpCommand}" 
+                                utility:MouseBehaviour.MouseDownCommand="{Binding MouseDownCommand}"
+                                utility:MouseBehaviour.MouseMoveCommand="{Binding MouseMoveCommand}"/>
+            <TextBlock Grid.Column="0" Grid.Row="0" Margin="6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="Silver" FontSize="12"
+                                   Text="{Binding Name}" FontFamily="{StaticResource Agressive}">
+                <TextBlock.BitmapEffect>
+                    <DropShadowBitmapEffect/>
+                </TextBlock.BitmapEffect>
+            </TextBlock>
+
+            <Canvas Grid.Row="1" Grid.Column="0" Width="{Binding ElementName=imgSel, Path=ActualWidth}" Height="{Binding ElementName=imgSel, Path=ActualHeight}"
+                                Visibility="{Binding RoiAdjOn, Converter={StaticResource ConvertBool2Visibility}}" >
+                <Rectangle Fill="GreenYellow" Opacity="0.3" Stroke="DeepPink" StrokeThickness="1"
+                                Canvas.Left="{Binding Path=X0}" Canvas.Top="{Binding Path=Y0}" Height="{Binding Path=SelHeight}" Width="{Binding Path=SelWidth}"
+                               utility:MouseBehaviour.MouseUpCommand="{Binding SelRegionMouseUpCommand}" 
+                               utility:MouseBehaviour.MouseDownCommand="{Binding SelRegionMouseDownCommand}"
+                               utility:MouseBehaviour.MouseMoveCommand="{Binding SelRegionMouseMoveCommand}" />
+            </Canvas>
+
+            <Expander ExpandDirection="Left" HorizontalAlignment="right" Panel.ZIndex="2"  Visibility="{Binding RoiAdjOn, Converter={StaticResource ConvertBool2Visibility}}">
+                <Expander.Header>
+                    <TextBlock Margin="2" Text="Commands" Foreground="Silver">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform Angle="90"/>
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                </Expander.Header>
+                <ScrollViewer Width="auto" Background="Black" Opacity="0.8">
+                    <StackPanel>
+                        <Grid HorizontalAlignment="Right" VerticalAlignment="Top" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Image Grid.Column="0" Grid.Row="1" Margin="2" Width="16" Height="16" Opacity="0.6" Source="/Screw;component/Resources/arrow-left-32.png">
+                                <Image.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelRegionMoveLeftCommand}"/>
+                                </Image.InputBindings>
+                            </Image>
+                            <Image Grid.Column="1" Grid.Row="0" Margin="2" Width="16" Height="16" Opacity="0.6" Source="/Screw;component/Resources/arrow-up-32.png">
+                                <Image.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelRegionMoveUpCommand}"/>
+                                </Image.InputBindings>
+                            </Image>
+                            <Image Grid.Column="2" Grid.Row="1" Margin="2" Width="16" Height="16" Opacity="0.6" Source="/Screw;component/Resources/arrow-right-32.png">
+                                <Image.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelRegionMoveRightCommand}"/>
+                                </Image.InputBindings>
+                            </Image>
+                            <Image Grid.Column="1" Grid.Row="2" Margin="2" Width="16" Height="16" Opacity="0.6" Source="/Screw;component/Resources/arrow-down-32.png">
+                                <Image.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelRegionMoveDownCommand}"/>
+                                </Image.InputBindings>
+                            </Image>
+
+                            <Image Grid.Column="0" Grid.Row="4" Margin="0" Width="18" Height="18" Opacity="0.6" Source="/Screw;component/Resources/arrow-left-edge-32.png">
+                                <Image.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelRegionLeftExtendCommand}"/>
+                                </Image.InputBindings>
+                            </Image>
+                            <Image Grid.Column="1" Grid.Row="3" Margin="0" Width="18" Height="18" Opacity="0.6" Source="/Screw;component/Resources/arrow-up-edge-32.png">
+                                <Image.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelRegionUpExtendCommand}"/>
+                                </Image.InputBindings>
+                            </Image>
+
+                            <Image Grid.Column="2" Grid.Row="4" Margin="0" Width="18" Height="18" Opacity="0.6" Source="/Screw;component/Resources/arrow-right-edge-32.png">
+                                <Image.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelRegionRightExtendCommand}"/>
+                                </Image.InputBindings>
+                            </Image>
+                            <Image Grid.Column="1" Grid.Row="5" Margin="0" Width="18" Height="18" Opacity="0.6" Source="/Screw;component/Resources/arrow-bottom-edge-32.png">
+                                <Image.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding SelRegionBottomExtendCommand}"/>
+                                </Image.InputBindings>
+                            </Image>
+                            <StackPanel Grid.Row="6" Grid.ColumnSpan="3">
+                                <!--<Button Grid.Row="6" Grid.ColumnSpan="3" Margin="2" Content="Set Mark" Command="{Binding SetMarkCommand}"/>-->
+                                <CheckBox Grid.Row="6" Grid.ColumnSpan="3" Margin="2" Content="Mask Draw" Foreground="White" IsChecked="{Binding MaskDrawMode}"/>
+                                <Button Grid.Row="6" Grid.ColumnSpan="3" Margin="2" Content="设定为基准区域" Command="{Binding SetMarkCommand}"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="X:" Foreground="DeepPink" Margin="10 5 10 0"/>
+                                <TextBlock Text="Y:" Foreground="DeepPink" Margin="10 5 10 0"/>
+                                <TextBlock Text="W:" Foreground="DeepPink" Margin="10 5 10 0"/>
+                                <TextBlock Text="H:" Foreground="DeepPink" Margin="10 5 10 0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="{Binding RoiX0}" Foreground="DeepPink" Margin="10 5 10 0"/>
+                                <TextBlock Text="{Binding RoiY0}" Foreground="DeepPink" Margin="10 5 10 0"/>
+                                <TextBlock Text="{Binding RoiWidth}" Foreground="DeepPink" Margin="10 5 10 0"/>
+                                <TextBlock Text="{Binding RoiHeight}" Foreground="DeepPink" Margin="10 5 10 0"/>
+                            </StackPanel>
+                        </Grid>
+
+
+
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Expander>
+
+
+
+
+        </Grid>
+    </Border>
+</Window>

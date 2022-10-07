@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Screw.View.uclStatusInfor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Screw.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+  
+    <Grid>
+        <Border CornerRadius="20" Background="SteelBlue" Opacity="0.6">
+            <Border.BitmapEffect>
+                <DropShadowBitmapEffect/>
+            </Border.BitmapEffect>
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard   AutoReverse="True" RepeatBehavior="Forever">
+                            <ColorAnimation Duration="00:00:01" From="SteelBlue" To="Violet"  RepeatBehavior="Forever" Storyboard.TargetProperty="Background.Color"></ColorAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Border.Triggers>
+        </Border>
+        <Grid>
+            <TextBlock Text="清理文件中！请不要操作！"  VerticalAlignment="Center"  TextAlignment="Center" FontSize="60"  FontFamily="{StaticResource Agressive}" FontWeight="Bold"/>
+
+        </Grid>
+    </Grid>
+</UserControl>

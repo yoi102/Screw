@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="Screw.View.uclPlcView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:utility="clr-namespace:Screw.Utilities"
+             xmlns:local="clr-namespace:Screw.View"
+             mc:Ignorable="d" 
+             Height="400" Width="300">
+    <UserControl.Resources>
+        <utility:ConverterConnection2Color x:Key="Connection2ColorConverter"/>
+    </UserControl.Resources>
+    <Grid Margin="0,2,0,0" DataContext="{Binding PlcCtrl}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="#FF007ACC">
+            <TextBlock VerticalAlignment="Center" Margin="2" Text="PLC" Foreground="WhiteSmoke"/>
+        </Border>
+        <Border Grid.Row="1" Background="#262626" CornerRadius="4">
+        <Grid  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+ 
+            <Ellipse Grid.Column="2" Grid.Row="0" Margin="2" VerticalAlignment="Center" HorizontalAlignment="Center" Width="10" Height="10"
+                         Fill="{Binding PlcIsConnected, Converter={StaticResource Connection2ColorConverter}}"/>
+            
+                <TextBlock Grid.Column="0" Grid.Row="0" Margin="2" Text="端口" Foreground="Silver"/>
+                <TextBox Grid.Column="1" Grid.Row="0" Margin="2" Text="{Binding Port}" Foreground="Blue"  TextAlignment="Center"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" Margin="2" Text="读写地址" Foreground="Silver"/>
+                <TextBox Grid.Column="1" Grid.Row="1" Margin="2" TextAlignment="Center" Foreground="Blue" Text="{Binding Add}"/>
+                <TextBlock Grid.Column="0" Grid.Row="2" Margin="2" Text="写入值" Foreground="Silver"/>
+                <TextBox Grid.Column="1" Grid.Row="2" Margin="2" TextAlignment="Center" Foreground="Blue" Text="{Binding Val}"/>
+                <TextBlock Grid.Column="0" Grid.Row="3" Margin="3" Text="波特率" Foreground="Silver"/>
+                <TextBox Grid.Column="1" Grid.Row="3" Margin="3" TextAlignment="Center" Foreground="Blue" Text="{Binding Baudrate}"/>
+                <TextBlock Grid.Column="0" Grid.Row="4" Margin="3" Text="SlaveID" Foreground="Silver"/>
+                <TextBox Grid.Column="1" Grid.Row="4" Margin="3" TextAlignment="Center" Foreground="Blue" Text="{Binding SlaveID}"/>
+
+
+                <Button Grid.Row="0" Grid.Column="3"  Content="CONNECT" Command="{Binding BtnConnectCommand}"/>
+                <Button Grid.Row="1" Grid.Column="3" Content="断开" Command="{Binding BtnDisconnectCommand}"/>
+                <Button Grid.Row="2" Grid.Column="3" Content="测试读" Command="{Binding BtnReadCommand}"/>
+                <Button Grid.Row="3" Grid.Column="3" Content="测试写" Command="{Binding BtnWriteCommand}" />
+
+                <Button Grid.Row="5" Grid.Column="3" Content="螺丝位" Command="{Binding BtnWrite10To50Command}" />
+                <Button Grid.Row="6" Grid.Column="3" Content="反面位" Command="{Binding BtnWrite10To44Command}" />
+                <Button Grid.Row="7" Grid.Column="3" Content="正面位" Command="{Binding BtnWrite20To47Command}" />
+
+
+
+
+                <TextBlock Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left"   TextWrapping="Wrap" Text="H_下一位" ToolTip="下一个地址的值" VerticalAlignment="Center"   Foreground="Silver"/>
+                <TextBlock Grid.Row="8" Grid.Column="0" HorizontalAlignment="Left"   TextWrapping="Wrap" Text="L_当前位" ToolTip="当前地址的值" VerticalAlignment="Center"   Foreground="Silver"/>
+
+                <TextBlock Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left"  TextAlignment="Center" Margin="6"  TextWrapping="Wrap" Text="{Binding NextVal }" VerticalAlignment="Top"   Foreground="WhiteSmoke"/>
+                <TextBlock Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left"  TextAlignment="Center" Margin="6"  TextWrapping="Wrap" Text="{Binding CurrentVal }" VerticalAlignment="Top"   Foreground="WhiteSmoke"/>
+
+
+
+        </Grid>
+        </Border>
+    </Grid>
+
+</UserControl>

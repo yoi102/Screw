@@ -1,0 +1,292 @@
+﻿<UserControl x:Class="Screw.View.uclCommandsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:utility="clr-namespace:Screw.Utilities"
+             xmlns:local="clr-namespace:Screw.View" xmlns:viewmodel="clr-namespace:Screw.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:ViewModelMain}"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="300">
+    <UserControl.Resources>
+        <utility:ConverterConnectionColor x:Key="ConnectionColorConverter"/>
+        <utility:ConverterConnection2Color x:Key="Connection2ColorConverter"/>
+        <utility:ConverterConnection2Color x:Key="RoiOnOff2BtnTextConverter"/>
+
+        
+        
+        <Style x:Key="BtnImage" TargetType="Image">
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Opacity" Value="0.8"/>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation  Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.1"/>
+                            <DoubleAnimation  Storyboard.TargetProperty="Width" To="24" Duration="0:0:0.1"/>
+                            <DoubleAnimation  Storyboard.TargetProperty="Height" To="24" Duration="0:0:0.1"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation  Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.1"/>
+                            <DoubleAnimation  Storyboard.TargetProperty="Width" To="20" Duration="0:0:0.1"/>
+                            <DoubleAnimation  Storyboard.TargetProperty="Height" To="20" Duration="0:0:0.1"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="False" />
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="IsChecked" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Height="{TemplateBinding Height}" Width="{TemplateBinding Height}">
+                                <Rectangle x:Name="CheckBoxRectangle" Fill="White" Opacity="0.3" RadiusY="5" RadiusX="5"/>
+                                <Rectangle x:Name="CheckBoxRectangleOut" Stroke="#FFABADB3" StrokeThickness="1" RadiusY="5" RadiusX="5"/>
+                                <Grid x:Name="CheckedMark" Height="{TemplateBinding Height}" Width="{TemplateBinding Height}" Visibility="Collapsed" >
+                                    <Viewbox>
+                                        <Grid>
+                                            <Path SnapsToDevicePixels="True" StrokeThickness="3" Data="M1,9 L10,17" Stroke="GreenYellow"/>
+                                            <Path SnapsToDevicePixels="True" StrokeThickness="3" Data="M8,17 L20,4" Stroke="GreenYellow"/>
+                                        </Grid>
+                                    </Viewbox>
+                                </Grid>
+                            </Grid>
+                            <ContentPresenter Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckedMark" Property="Visibility" Value="Visible"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--togg控件-->
+        <Style x:Key="AndroidToggleButton" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Viewbox>
+                            <Border x:Name="Border" CornerRadius="10"
+                            Background="#FFFFFFFF"
+                            Width="40" Height="20">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="0.5" Direction="0" Opacity="0.3" />
+                                </Border.Effect>
+                                <Ellipse x:Name="Ellipse" Fill="#FFFFFFFF" Stretch="Uniform"
+                                 Margin="2 1 2 1"
+                                 Stroke="Gray" StrokeThickness="0.2"
+                                 HorizontalAlignment="Stretch">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3" Direction="260" />
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                            </Border>
+                        </Viewbox>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Checked">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Border"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="#FF4CD661"
+                                                    Duration="0:0:0.1" />
+                                        <ThicknessAnimation Storyboard.TargetName="Ellipse"
+                                                        Storyboard.TargetProperty="Margin"
+                                                        To="20 1 2 1"
+                                                        Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Unchecked">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Border"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="White"
+                                                    Duration="0:0:0.1" />
+                                        <ThicknessAnimation Storyboard.TargetName="Ellipse"
+                                                        Storyboard.TargetProperty="Margin"
+                                                        To="2 1 2 1"
+                                                        Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
+        <!--<Storyboard x:Key="OpenMenuTest">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="GridMenuTest">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-200"/>
+            </DoubleAnimationUsingKeyFrames>
+
+        </Storyboard>
+        <Storyboard x:Key="CloseTest">
+
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="GridBackground">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="GridMenuTest">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>-->
+
+    </UserControl.Resources>
+    <!--这里会报错--><!--
+    <UserControl.Triggers>
+        --><!--<EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseTest">
+            <BeginStoryboard  Storyboard="{StaticResource CloseMenuTest}"/>
+        </EventTrigger>--><!--
+        <EventTrigger RoutedEvent="MenuItem.Click" SourceName="ButtonOpenTest">
+            <BeginStoryboard Storyboard="{StaticResource OpenMenuTest}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="MenuItem.Click" SourceName="ButtonOpenDistr">
+            <BeginStoryboard Storyboard="{StaticResource CloseTest}"/>
+        </EventTrigger>
+    </UserControl.Triggers>-->
+
+    <Grid>
+        <Grid>
+            <Border CornerRadius="6" Background="Black" Opacity="0.4"/>
+            <Grid>
+                <!--<Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>-->
+                <!--<Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1" Width="140" Height="25"  Content="校正" Foreground="Blue" FontSize="20" Command="{Binding OriginCalibration2Command}"  ToolTipService.ShowDuration="999999999"  ToolTip="重置Master孔的位置，，慎重设置。"/>
+                    --><!--<Menu Grid.Column="0"  Width="80" HorizontalAlignment="Center"  VerticalAlignment="Center">
+                        <MenuItem Header="MENU" Width="80" >
+                            <MenuItem x:Name="ButtonOpenTest"   Header="Test" ToolTip="测试" Height="20" Width="130"  Margin="5"/>
+                            <MenuItem x:Name="ButtonOpenDistr"  Header="ttt" ToolTip="ttt" Height="20" Width="130" />
+                        </MenuItem>
+                    </Menu>--><!--
+                </Grid>-->
+                <Grid x:Name="GridBackground" Grid.Row="1">
+                    <StackPanel Orientation="Vertical" Margin="2">
+                        <Border  Background="#FF007ACC">
+                            <Grid>
+
+                                <TextBlock VerticalAlignment="Center" Margin="2" Text="Parameters" Foreground="WhiteSmoke"/>
+
+                                <Button  HorizontalAlignment="Right" VerticalAlignment="Top" Background="{x:Null}" ToolTip="配置保存" Foreground="Black" BorderBrush="{x:Null}" Width="30" Height="30" Padding="0" Command="{Binding SaveParaCommand }"  >
+                                    <Image Style="{StaticResource BtnImage}" Source="/Screw;component/Resources/icons8-save-100.png"/>
+                                </Button>
+                            </Grid>
+                        </Border>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox  Width="140" Height="15"  Content="第二个孔" Foreground="WhiteSmoke" FontSize="14" IsChecked="{Binding GloPara.MasterSecondHole}" Style="{StaticResource CheckBoxStyle}"  ToolTipService.ShowDuration="999999999"  ToolTip="测试=Master第一或二孔的坐标"  />
+                            <Button Grid.Column="1" Margin="10,2,10,2" Content="测试Master" Command="{Binding CorrectionCommand}" ToolTipService.ShowDuration="999999999"  ToolTip="测试计算Master的孔的坐标，需要在现场拍照，不能用图片"/>
+                            <Button Grid.Column="2"   Content="校正Master" Foreground="Blue" FontSize="16" Command="{Binding OriginCalibration2Command}"  ToolTipService.ShowDuration="999999999"  ToolTip="重置Master孔的位置，，慎重设置。"/>
+
+                        </Grid>
+                        <!--<Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="使用本地图片" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="WhiteSmoke"/>
+                            <ToggleButton  Grid.Column="0" Width="50" Height="35"  HorizontalAlignment="Left" IsChecked="{Binding UseLocalImage}" Style="{StaticResource AndroidToggleButton}" ToolTipService.ShowDuration="999999999"  ToolTip="使用本地图片时，自动模式会关闭，用完要关掉这个模式" />
+                            <Button Grid.Column="1" Margin="10,2,10,2" Content="选择图片" Command="{Binding UseLocalImageCommand}" ToolTipService.ShowDuration="999999999"  ToolTip="使用本地图片测试，图片不能为空，不然报错" />
+                        </Grid>-->
+                        <!--<Button Margin="2" Background="SkyBlue" FontWeight="Black" Command="{Binding SaveParaCommand}">保存设定</Button>-->
+                       
+                        <TabControl Height="800">
+                            
+                            <TabItem Header="Global">
+                                <ScrollViewer Margin="2,2,2,2" VerticalScrollBarVisibility="Auto">
+                                    <xctk:PropertyGrid AutoGenerateProperties="True" SelectedObject="{Binding GloPara}" />
+                                </ScrollViewer>
+                            </TabItem>
+                            
+                            <TabItem Header="ScrewMO">
+                                <ScrollViewer Margin="2,2,2,2" VerticalScrollBarVisibility="Auto" >
+                                    <xctk:PropertyGrid AutoGenerateProperties="True" SelectedObject="{Binding ScrewPara}" />
+                                </ScrollViewer>
+                            </TabItem>
+                            <TabItem Header="GreaseMO">
+                                <ScrollViewer Margin="2,2,2,2" VerticalScrollBarVisibility="Visible" >
+
+                                    <xctk:PropertyGrid AutoGenerateProperties="True" SelectedObject="{Binding GreasePara}" />
+                                </ScrollViewer>
+                            </TabItem>
+
+                          
+
+                            <!--<TabItem Header="PLC">
+                                <ScrollViewer Margin="2,2,2,2" VerticalScrollBarVisibility="Auto" >
+                                    <xctk:PropertyGrid AutoGenerateProperties="True" SelectedObject="{Binding PlcCtrl}" />
+                                </ScrollViewer>
+                            </TabItem>
+                            
+                            
+                            
+                            <TabItem Header="SerialPort">
+                                <ScrollViewer Margin="2,2,2,2" VerticalScrollBarVisibility="Auto">
+                                    <xctk:PropertyGrid AutoGenerateProperties="True" SelectedObject="{Binding SerialCtrl}" />
+                                </ScrollViewer>
+                            </TabItem>-->
+
+                        </TabControl>
+                    </StackPanel>
+                </Grid>
+                <Grid Visibility="Hidden"  Grid.Row="1" x:Name="GridMenuTest" Width="200"  HorizontalAlignment="Right" Margin="0 0 -200 0" Background="White" RenderTransformOrigin="0.5,0.5">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+
+                    <ScrollViewer >
+                        <xctk:PropertyGrid AutoGenerateProperties="True" SelectedObject="{Binding GloPara}" />
+                    </ScrollViewer>
+
+                </Grid>
+
+
+            </Grid>
+        </Grid>
+    </Grid>
+
+
+
+
+</UserControl>

@@ -1,0 +1,45 @@
+﻿<UserControl Name="UC" x:Class="Screw.View.uclImage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Screw.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Border CornerRadius="10" Background="Black">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid Name="workspace"  Margin="4">
+                    <Grid.Resources>
+                        <TransformGroup x:Key="Imageview">
+                            <ScaleTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.Resources>
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Cursor="Arrow" Focusable="False" x:Name="BackFrame">
+                        <ContentControl MouseLeftButtonDown="ImgMouseLeftButtonDown"  MouseLeftButtonUp="ImgMouseLeftButtonUp"  MouseMove="ImgMouseMove" MouseWheel="ImgMouseWheel">
+                            <!--注意name-->
+                            <Image Name="image" Source="{Binding Path=ImageSource, ElementName=UC}" MouseMove="image_MouseMove" Width="Auto" Height="Auto" RenderTransform="{StaticResource Imageview}"  Stretch="Uniform"  RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                        </ContentControl>
+                    </ScrollViewer>
+                </Grid>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <TextBlock Text=" X:" Foreground="White"/>
+                    <TextBlock Name="Path_X" Foreground="White"/>
+                    <TextBlock Text=" Y:" Foreground="White"/>
+                    <TextBlock Name="Path_Y" Foreground="White"/>
+                </StackPanel>
+
+
+
+            </Grid>
+
+        </Border>
+
+        
+    </Grid>
+</UserControl>
